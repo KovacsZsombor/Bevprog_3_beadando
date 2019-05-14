@@ -16,6 +16,7 @@ public:
     virtual void menu(std::string sor);
     virtual void handle(genv::event ev);
     virtual void draw() ;
+    virtual void new_menu(std::string newmenu);
     virtual int szovegmag();
     virtual bool kilog();
     virtual double gmeret();

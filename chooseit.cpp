@@ -1,6 +1,6 @@
 ﻿#include "chooseit.hpp"
 #include "graphics.hpp"
-
+#include <iostream>
 using namespace genv;
 
 
@@ -21,7 +21,11 @@ void Chooseit::menu(std::string sor){
         }
     }
     _szv.push_back(uj);
-    for (unsigned i=0;i<_szv.size();++i) if (i*szovegmag()+szovegmag()<_size_y) belefer++;
+    for (unsigned i=0;i*szovegmag()+szovegmag()<_size_y;++i) belefer++;
+}
+
+void Chooseit::new_menu(std::string newmenu){
+    if (!newmenu.empty()) _szv.push_back(newmenu);
 }
 
 int Chooseit::szovegmag() {
@@ -67,13 +71,12 @@ void Chooseit::draw()
         else gout<<color(0,0,0)<<move_to(_x,12+_y+i*szovegmag()-(szovegmag()*girany))<<text(_szv[i]);
         }
     }
-
-
 }
 
 void Chooseit::tofile(std::string fn){
     fname=fn;
 }
+
 
 void Chooseit::handle(event ev)
 {
@@ -100,7 +103,6 @@ void Chooseit::handle(event ev)
         }
         }
     }
-
     if (elemi!=0){
     if (ev.keycode == key_up || ev.button==btn_wheelup) {
             if (elemi <= girany) girany--;

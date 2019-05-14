@@ -1,6 +1,4 @@
 #include "text.hpp"
-#include "graphics.hpp"
-#include <iostream>
 
 using namespace genv;
 
@@ -23,9 +21,8 @@ void Text::handle(event ev)
     if ((ev.type == ev_key && ev.keycode != key_backspace &&
          ev.keycode > 0 && ev.keycode < 300)) {
             _num+=(char)ev.keycode;
-            std::cout<<ev.keycode<<"\n";
     }
-    if (ev.keycode == key_backspace || gout.twidth(_num)>_size_x+12){
+    if (ev.keycode == key_backspace || gout.twidth(_num)>_size_x+10){
         if (!_num.empty()){
             _num.erase(std::prev(_num.end()));
         }
