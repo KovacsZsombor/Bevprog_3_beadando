@@ -199,6 +199,7 @@ matrixindex amoba::ellenoriznk(){
 void amoba::newgame(){
     bm.clear();
     gameover=false;
+    XO=0;
     std::vector<negyzet> bv;
     negyzet nzt;
     for (int n=0; n<palyasize; n++)

@@ -11,8 +11,8 @@
 using namespace std;
 using namespace genv;
 
-amoba * am= new amoba(25,0,400,400);
-gomb * gmb = new gomb(10,420,100,40);
+amoba * am= new amoba(25,0,500,500);
+gomb * gmb = new gomb(10,520,100,40);
 
 void event_loop(vector<Widget*>& widgets) {
     event ev;
