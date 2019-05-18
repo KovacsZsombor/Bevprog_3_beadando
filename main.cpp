@@ -11,7 +11,8 @@
 using namespace std;
 using namespace genv;
 
-
+amoba * am= new amoba(25,0,400,400);
+gomb * gmb = new gomb(10,420,100,40);
 
 void event_loop(vector<Widget*>& widgets) {
     event ev;
@@ -30,6 +31,7 @@ void event_loop(vector<Widget*>& widgets) {
         for (Widget * w : widgets) {
             w->draw();
         }
+        if (gmb->nyomva()) am->newgame();
         gout << refresh;
     }
 }
@@ -39,13 +41,9 @@ int main()
     gout.open(600,600);
     vector<Widget*> w;
 
-    amoba * am= new amoba(25,0,400,400);
-    gomb * gmb = new gomb(10,420,100,40);
+
     gmb->szoveg("Uj jatek");
-    if (gmb->nyomva()) {
-    am->newgame();
-    std::cout<<"Uj jatek"<<"  ";
-    }
+
     w.push_back(gmb);
     w.push_back(am);
 

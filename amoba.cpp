@@ -6,13 +6,14 @@ using namespace genv;
 amoba::amoba(int x,int y, int sx, int sy) : Widget (x,y,sx,sy)
 {
     std::vector<negyzet> bv;
+    palyasize=20;
     negyzet nzt;
     sxmeret=sx;
-    for (int n=0; n<20; n++)
+    for (int n=0; n<palyasize; n++)
     {
-        for (int k=0; k<20; k++)
+        for (int k=0; k<palyasize; k++)
         {
-            nzt.meret=sx/20;
+            nzt.meret=sx/palyasize;
             nzt.x=_x+(k*nzt.meret);
             nzt.y=_y+(n*nzt.meret);
             nzt.nyomva=false;
@@ -66,11 +67,18 @@ void amoba::draw()
             }
             if (ellenoriznk().i!=-1 && ellenoriznk().j!=-1) {
 
-                    if (ij.sor && ij.oszlop){
+                    if (ij.sor && ij.oszlop && ij.foatlo){
                     gout<<color(255,0,0)<<move_to(bm[ij.i][ij.j].x, bm[ij.i][ij.j].y)
                     <<line_to(bm[ij.i+4][ij.j+4].x+mrt,bm[ij.i+4][ij.j+4].y+mrt)
                     <<move_to(bm[ij.i][ij.j].x, bm[ij.i][ij.j].y+1)
                     <<line_to(bm[ij.i+4][ij.j+4].x+mrt-1,bm[ij.i+4][ij.j+4].y+mrt);
+                    gameover=true;
+                    }
+                    else if (ij.sor && ij.oszlop && ij.mellekatlo){
+                    gout<<color(255,0,0)<<move_to(bm[ij.i][ij.j].x+mrt, bm[ij.i][ij.j].y)
+                    <<line_to(bm[ij.i+4][ij.j-4].x,bm[ij.i+4][ij.j-4].y+mrt)
+                    <<move_to(bm[ij.i][ij.j].x+mrt, bm[ij.i][ij.j].y+1)
+                    <<line_to(bm[ij.i+4][ij.j-4].x+1,bm[ij.i+4][ij.j-4].y+mrt);
                     gameover=true;
                     }
                     else if (ij.sor){
@@ -120,7 +128,7 @@ void amoba::handle(event ev)
 matrixindex amoba::ellenoriznk(){
     ij.i=-1;
     ij.j=-1;
-    ij.sor=ij.oszlop=false;
+    ij.sor=ij.oszlop=ij.foatlo=ij.mellekatlo=false;
     for (int i=0;i<palyasize;++i){
         for (int j=0;j<palyasize-4;++j){
             if (bm[i][j].X && bm[i][j+1].X && bm[i][j+2].X && bm[i][j+3].X && bm[i][j+4].X){
@@ -153,18 +161,34 @@ matrixindex amoba::ellenoriznk(){
             }
         }
     }
-    for (int i=0;i<16;i++){
-        for (int j=0;j<16;j++){
+    for (int i=0;i<palyasize-4;i++){
+        for (int j=0;j<palyasize-4;j++){
             if (bm[i][j].X && bm[i+1][j+1].X && bm[i+2][j+2].X && bm[i+3][j+3].X && bm[i+4][j+4].X){
                 ij.i=i;
                 ij.j=j;
-                ij.sor=ij.oszlop=true;
+                ij.sor=ij.oszlop=ij.foatlo=true;
                 return ij;
             }
             if (bm[i][j].O && bm[i+1][j+1].O && bm[i+2][j+2].O && bm[i+3][j+3].O && bm[i+4][j+4].O){
                 ij.i=i;
                 ij.j=j;
-                ij.sor=ij.oszlop=true;
+                ij.sor=ij.oszlop=ij.foatlo=true;
+                return ij;
+            }
+        }
+    }
+    for (int i=0;i<palyasize-4;i++){
+        for (int j=4;j<palyasize;j++){
+            if (bm[i][j].X && bm[i+1][j-1].X && bm[i+2][j-2].X && bm[i+3][j-3].X && bm[i+4][j-4].X){
+                ij.i=i;
+                ij.j=j;
+                ij.sor=ij.oszlop=ij.mellekatlo=true;
+                return ij;
+            }
+            if (bm[i][j].O && bm[i+1][j-1].O && bm[i+2][j-2].O && bm[i+3][j-3].O && bm[i+4][j-4].O){
+                ij.i=i;
+                ij.j=j;
+                ij.sor=ij.oszlop=ij.mellekatlo=true;
                 return ij;
             }
         }
@@ -177,12 +201,11 @@ void amoba::newgame(){
     gameover=false;
     std::vector<negyzet> bv;
     negyzet nzt;
-    std::cout<<"meghivva"<<"\n";
-    for (int n=0; n<20; n++)
+    for (int n=0; n<palyasize; n++)
     {
-        for (int k=0; k<20; k++)
+        for (int k=0; k<palyasize; k++)
         {
-            nzt.meret=sxmeret/20;
+            nzt.meret=sxmeret/palyasize;
             nzt.x=_x+(k*nzt.meret);
             nzt.y=_y+(n*nzt.meret);
             nzt.nyomva=false;

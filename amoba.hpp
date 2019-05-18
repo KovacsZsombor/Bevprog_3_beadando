@@ -12,14 +12,15 @@ struct negyzet{
 
 struct matrixindex{
     int i,j;
-    bool sor, oszlop;
+    bool sor, oszlop,foatlo,mellekatlo;
 };
 
 class amoba : public Widget{
 protected:
     std::vector<std::vector<negyzet> > bm;
-    int XO=0, palyasize=20, sxmeret;
+    int XO=0, palyasize, sxmeret;
     matrixindex ij;
+
     bool gameover=false;
 public:
     amoba (int x, int y,int sx,int sy);
