@@ -20,7 +20,7 @@ struct matrixindex{
 class amoba : public Widget{
 protected:
     std::vector<std::vector<negyzet> > bm;
-    int XO=0, palyasize=6, sxmeret, allasx=0, allaso=0;
+    int XO=0, palyasize=20, sxmeret, allasx=0, allaso=0;
     matrixindex ij;
     bool gameover=false, winX=false, winO=false, winhez=true;
 public:
