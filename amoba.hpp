@@ -3,7 +3,9 @@
 #include "widgets.hpp"
 #include "graphics.hpp"
 #include <vector>
+#include <sstream>
 #include <cmath>
+#include <string>
 
 struct negyzet{
     int x=0,y=0, meret=0;
@@ -18,10 +20,9 @@ struct matrixindex{
 class amoba : public Widget{
 protected:
     std::vector<std::vector<negyzet> > bm;
-    int XO=0, palyasize, sxmeret;
+    int XO=0, palyasize=6, sxmeret, allasx=0, allaso=0;
     matrixindex ij;
-
-    bool gameover=false;
+    bool gameover=false, winX=false, winO=false, winhez=true;
 public:
     amoba (int x, int y,int sx,int sy);
     virtual void draw();

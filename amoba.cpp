@@ -3,10 +3,18 @@
 
 using namespace genv;
 
+std::string to_str(const double x, const int tizedes) {
+    std::stringstream ss;
+    ss << std::fixed;
+    ss.precision(tizedes); // set # places after decimal
+    ss << x;
+    return ss.str();
+}
+
+
 amoba::amoba(int x,int y, int sx, int sy) : Widget (x,y,sx,sy)
 {
     std::vector<negyzet> bv;
-    palyasize=20;
     negyzet nzt;
     sxmeret=sx;
     for (int n=0; n<palyasize; n++)
@@ -31,6 +39,7 @@ void amoba::draw()
 {
     int mrt=bm[0][0].meret, r,kx,ky;
     double pi = 3.14159;
+    gout<<color(0,0,0)<<move_to(_x,_size_y)<<box(_size_x,12);
     for (int i=0; i<palyasize; i++)
     {
         for (int j=0; j<palyasize; j++)
@@ -98,11 +107,12 @@ void amoba::draw()
                 }
         }
     }
+    gout<<color(100,250,250)<<move_to(_x,_size_y+10)<<text("X: ")<<text(to_str(allasx,0))
+    <<color(100,250,100)<<move_to(_x+60,_size_y+10)<<text("O: ")<<text(to_str(allaso,0));
 }
 
 void amoba::handle(event ev)
 {
-    int mrt=bm[0][0].meret;
     if (ev.type == ev_mouse && ev.button== btn_left)
     {
         for (int i=0; i<palyasize; i++)
@@ -118,78 +128,89 @@ void amoba::handle(event ev)
                     if (XO%2) bm[i][j].X=true;
                     else if (XO%2==0) bm[i][j].O=true;
                 }
-
             }
         }
-
     }
+
+        if (winX && winhez) {
+            allasx++;
+            winhez=false;
+        }
+        else if (winO && winhez ) {
+            allaso++;
+            winhez=false;
+        }
 }
 
 matrixindex amoba::ellenoriznk(){
     ij.i=-1;
     ij.j=-1;
     ij.sor=ij.oszlop=ij.foatlo=ij.mellekatlo=false;
-    for (int i=0;i<palyasize;++i){
-        for (int j=0;j<palyasize-4;++j){
+    for (int i=0;i<palyasize;i++){
+        for (int j=0;j<palyasize;j++){
+        if (i<palyasize && j<palyasize-4) {
             if (bm[i][j].X && bm[i][j+1].X && bm[i][j+2].X && bm[i][j+3].X && bm[i][j+4].X){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=true;
+                winX=true;
                 return ij;
             }
             if (bm[i][j].O && bm[i][j+1].O && bm[i][j+2].O && bm[i][j+3].O && bm[i][j+4].O){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=true;
+                winO=true;
                 return ij;
             }
-        }
-    }
-    for (int i=0;i<palyasize-4;++i){
-        for (int j=0;j<palyasize;++j){
+            }
+            if (i<palyasize-4 && j<palyasize) {
              if (bm[i][j].X && bm[i+1][j].X && bm[i+2][j].X && bm[i+3][j].X && bm[i+4][j].X){
                 ij.i=i;
                 ij.j=j;
                 ij.oszlop=true;
+                winX=true;
                 return ij;
             }
             if (bm[i][j].O && bm[i+1][j].O && bm[i+2][j].O && bm[i+3][j].O && bm[i+4][j].O){
                 ij.i=i;
                 ij.j=j;
                 ij.oszlop=true;
+                winO=true;
                 return ij;
             }
-        }
-    }
-    for (int i=0;i<palyasize-4;i++){
-        for (int j=0;j<palyasize-4;j++){
+            }
+            if (i<palyasize-4 && j< palyasize-4){
             if (bm[i][j].X && bm[i+1][j+1].X && bm[i+2][j+2].X && bm[i+3][j+3].X && bm[i+4][j+4].X){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=ij.oszlop=ij.foatlo=true;
+                winX=true;
                 return ij;
             }
             if (bm[i][j].O && bm[i+1][j+1].O && bm[i+2][j+2].O && bm[i+3][j+3].O && bm[i+4][j+4].O){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=ij.oszlop=ij.foatlo=true;
+                winO=true;
                 return ij;
             }
-        }
-    }
-    for (int i=0;i<palyasize-4;i++){
-        for (int j=4;j<palyasize;j++){
+            }
+            if (i<palyasize-4 && j<palyasize){
             if (bm[i][j].X && bm[i+1][j-1].X && bm[i+2][j-2].X && bm[i+3][j-3].X && bm[i+4][j-4].X){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=ij.oszlop=ij.mellekatlo=true;
+                winX=true;
                 return ij;
             }
             if (bm[i][j].O && bm[i+1][j-1].O && bm[i+2][j-2].O && bm[i+3][j-3].O && bm[i+4][j-4].O){
                 ij.i=i;
                 ij.j=j;
                 ij.sor=ij.oszlop=ij.mellekatlo=true;
+                winO=true;
                 return ij;
+            }
             }
         }
     }
@@ -213,6 +234,8 @@ void amoba::newgame(){
             nzt.O=false;
             nzt.X=false;
             nzt.foglalt=false;
+            winX=winO=false;
+            winhez=true;
             bv.push_back(nzt);
         }
         bm.push_back(bv);
